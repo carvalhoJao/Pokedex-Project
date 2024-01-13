@@ -1,7 +1,9 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pokedex</title>
     
@@ -26,48 +28,19 @@
         <h1>Pokedex</h1>
 
         <ol class="pokemons" id="pokemonList">
-            <li class="pokemon">
-                <span class="number">#001</span>
-                <span class="name">Bulbasaur</span>
-                
-                <div class="detail">
-                    <ol class="types">
-                        <li class="type">Grass</li>
-                        <li class="type">Poison</li>
-                    </ol>
-                    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/1.png" alt="Bulbasaur">
             
-                </div>
-
-            </li>
-
-            <!-- <li>Ivysaur
-                <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/2.png" alt="Ivysaur">
-            </li>
-            <li>Venusaur
-                <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/3.png" alt="Venusaur">
-            </li>
-            <li>Charmander
-                <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/4.png" alt="Charmander">
-            </li>
-            <li>Charmeleon
-                <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/5.png" alt="Charmeleon">
-            </li>
-            <li>Charizard
-                <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/6.png" alt="Charizard">
-            </li> -->
         </ol>
 
         <div class="pagination">
             <button id="loadMoreButton" type="button">
                 Load More
             </button>
-
         </div>
     </section>
-
-    <!-- <script src="/Pokedex Project/assets/js/main.js"></script> -->
+    
+    <script src="/assets/js/pokemon-model.js"></script>
     <script src="/assets/js/poke-api.js"></script>
+    <script src="/assets/js/main.js"></script>
 </body>
 
 </html>

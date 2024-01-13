@@ -1,72 +1,36 @@
-const pokemonList = document.getElementById('pokemonList')
-const loadMoreButton = document.getElementById('loadMoreButton')
 
-const pokemonCount = 151;
-var pokedex = {};
-const limit = 10
+const pokeApi = {}
 
-class Pokemon {
-    number;
-    name;
-    Description;
-    types = [];
-    img;
+function convertPokeApiDetailToPokemon(pokeDetail) {
+    const pokemon = new Pokemon()
+    pokemon.number = pokeDetail.id
+    pokemon.name = pokeDetail.name.charAt(0).toUpperCase() + pokeDetail.name.substring(1) 
+
+    const types = pokeDetail.types.map((typeSlot) => typeSlot.type.name)
+    const [type] = types
+
+    pokemon.types = types
+    pokemon.type = type
+
+    pokemon.photo = pokeDetail.sprites.other.home.front_default
+
+    console.log(pokeDetail.sprites.other);
+    return pokemon
 }
 
-window.onload = async function(){
-    for (let index = 1; index <= limit; index++) {
-        await getPokemon(index); 
-        pokemonList.innerHTML = initialLoad(index)
-    
-        // console.log(pokedex[index]["types"])
-    }
-    console.log(pokedex);
+pokeApi.getPokemonDetail = (pokemon) => {
+    return fetch(pokemon.url)
+        .then((response) => response.json())
+        .then(convertPokeApiDetailToPokemon)
 }
 
-function initialLoad(num){
-    
-    return `
-        <li class="pokemon ${pokedex[num]["types"][0]}">
-            <span class="number">#${num}</span>
-            <span class="name">${pokedex[num]["name"]}</span>
+pokeApi.getPokemons = (offset = 0, limit = 5) => {
+    const url = `https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${limit}`
 
-            <div class="detail">
-                <ol class="types">
-                    ${pokedex[num]["types"].map(type => `<li class="type ${type}">${type}</li>`).join(" ")}
-                </ol>
-
-                <img src="${pokedex[num]["img"]}">
-            </div>
-        </li>
-    `
-}
-
-async function getPokemon(numero) {
-    const pokemon = new Pokemon();
-    let url = "https://pokeapi.co/api/v2/pokemon/" + numero.toString();
-
-    let response = await fetch(url);
-    let result = await response.json();
-    
-    for (let index = 0; index < result["types"].length; index++) {
-        pokemon.types.push(result["types"][index]["type"]["name"])    
-    }
-
-    pokemon.name = result["name"];
-    pokemon.img = result["sprites"]["other"]["home"]["front_default"];
-    
-    response = await fetch(result["species"]["url"]);
-    result = await response.json();
-
-    pokemon.Description = result["flavor_text_entries"][4]["flavor_text"];
-
-    // console.log(pokemon.img);
-
-    pokedex[numero] = {
-        "name" : pokemon.name,
-        "img" : pokemon.img,
-        "types" : pokemon.types,
-        "Description" : pokemon.Description
-    }
-    // console.log(pokedex[numero]["img"]);
+    return fetch(url)
+        .then((response) => response.json())
+        .then((jsonBody) => jsonBody.results)
+        .then((pokemons) => pokemons.map(pokeApi.getPokemonDetail))
+        .then((detailRequests) => Promise.all(detailRequests))
+        .then((pokemonsDetails) => pokemonsDetails)
 }

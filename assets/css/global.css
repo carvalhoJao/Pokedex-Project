@@ -80,6 +80,16 @@ body {
 
 .pagination button {
     border-radius: .5rem;
+    border: none;
+    background-color: bisque;
+    width: 20%;
+    height: 2rem;
+    cursor: pointer;
+}
+
+.pagination button:hover {
+    background-color: burlywood;
+    transition: .2s;
 }
 
 @media screen and (min-width: 992px) {
