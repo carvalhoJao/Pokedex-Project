@@ -1,3 +1,6 @@
+const pokemonList = document.getElementById('pokemonList')
+const loadMoreButton = document.getElementById('loadMoreButton')
+
 const pokemonCount = 151;
 var pokedex = {};
 const limit = 10
@@ -12,10 +15,30 @@ class Pokemon {
 
 window.onload = async function(){
     for (let index = 1; index <= limit; index++) {
-        await getPokemon(index);
+        await getPokemon(index); 
+        pokemonList.innerHTML = initialLoad(index)
+    
+        // console.log(pokedex[index]["types"])
     }
-
     console.log(pokedex);
+}
+
+function initialLoad(num){
+    
+    return `
+        <li class="pokemon ${pokedex[num]["types"][0]}">
+            <span class="number">#${num}</span>
+            <span class="name">${pokedex[num]["name"]}</span>
+
+            <div class="detail">
+                <ol class="types">
+                    ${pokedex[num]["types"].map(type => `<li class="type ${type}">${type}</li>`).join(" ")}
+                </ol>
+
+                <img src="${pokedex[num]["img"]}">
+            </div>
+        </li>
+    `
 }
 
 async function getPokemon(numero) {
@@ -25,16 +48,19 @@ async function getPokemon(numero) {
     let response = await fetch(url);
     let result = await response.json();
     
-    pokemon.name = result["name"];
-    pokemon.types = result["types"];
-    pokemon.img = result["sprites"]["other"]["home"];
+    for (let index = 0; index < result["types"].length; index++) {
+        pokemon.types.push(result["types"][index]["type"]["name"])    
+    }
 
+    pokemon.name = result["name"];
+    pokemon.img = result["sprites"]["other"]["home"]["front_default"];
+    
     response = await fetch(result["species"]["url"]);
     result = await response.json();
 
     pokemon.Description = result["flavor_text_entries"][4]["flavor_text"];
 
-    // console.log(pokemonDesc);
+    // console.log(pokemon.img);
 
     pokedex[numero] = {
         "name" : pokemon.name,
@@ -42,23 +68,5 @@ async function getPokemon(numero) {
         "types" : pokemon.types,
         "Description" : pokemon.Description
     }
-    // console.log(pokemon);
+    // console.log(pokedex[numero]["img"]);
 }
-
-// function convertPokemonToLi(pokemon) {
-//     return `
-//         <li class="pokemon ${pokemon.type}">
-//             <span class="number">#${pokemon.number}</span>
-//             <span class="name">${pokemon.name}</span>
-
-//             <div class="detail">
-//                 <ol class="types">
-//                     ${pokemon.types.map((type) => `<li class="type ${type}">${type}</li>`).join('')}
-//                 </ol>
-
-//                 <img src="${pokemon.photo}"
-//                      alt="${pokemon.name}">
-//             </div>
-//         </li>
-//     `
-// }
