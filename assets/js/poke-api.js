@@ -14,7 +14,6 @@ function convertPokeApiDetailToPokemon(pokeDetail) {
 
     pokemon.photo = pokeDetail.sprites.other.home.front_default
 
-    console.log(pokeDetail.sprites.other);
     return pokemon
 }
 
